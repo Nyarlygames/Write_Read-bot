@@ -2,14 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <Windows.h>
+#include "EnumKey.h"
 #include <chrono>
 typedef std::chrono::high_resolution_clock Clock;
 using namespace std;
-
-#define KEY_UP 72
-#define KEY_DOWN 80
-#define KEY_LEFT 75
-#define KEY_RIGHT 77
 
 int main()
 {
@@ -17,81 +13,120 @@ int main()
 
     int c = 0;
 	bool quit = false;
-	bool isdown = false;
-	// need to have :
-	// 1 bool for key press detected
-	// 1 bool for key is still being pressed
-	// = 2 bools per keys (simultaneous inputs)
+	bool *isdown = new bool[256];
+	bool *ispressed = new bool[256];
+	Clock::time_point *timers = new Clock::time_point[256];
 
+	// init arrays of booleans
+	for (int i = 0; i < (sizeof(isdown) /sizeof(isdown[0])); i++) {
+		isdown[i] = false;
+	}
+	for (int i = 0; i < (sizeof(ispressed) /sizeof(ispressed[0])); i++) {
+		ispressed[i] = false;
+	}
 
-	// timer starts
-	// auto t1 = Clock::now();
-	// get timer (can be reused)
-	// auto t2 = Clock::now();
-	// value since t1 :
-	// std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count()
+	// timer started
+	Clock::time_point t1 = Clock::now();
 
-
-	auto t1 = Clock::now();
-
+	// LOOP WHILE PAGE DOWN
     while(!quit)
     {
-		// SPECIAL KEYS
-		if( GetAsyncKeyState(VK_LCONTROL) != 0)
-		{
-			if (isdown == false) {
-				isdown = true;
-				bot << "LCTRL" << endl;
-				auto t2 = Clock::now();
-				cout << "T " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() << " LCTRL" << endl;
+		// LOOP FOR EACH KEY
+		for (int x=0; x < (sizeof(keycodes) / sizeof(keycodes[0])); x++) {
+			// KEY IS BEING PRESSED
+			if (GetKeyState(keycodes[x]) & 0x8000) {
+				if (keycodes[x] == VK_NEXT) {
+					quit = true;
+				}
+				else {
+					if (isdown[x] == false){
+						isdown[x] = true;
+						timers[x] = Clock::now();
+					//	cout << "BEGIN " << std::chrono::duration_cast<std::chrono::nanoseconds>(timers[x] - t1).count() << " " << keycodes[x] << endl;
+					}					
+				}
+			}
+			// KEY RELEASED OR NO KEYS
+			else {
+				if (isdown[x] == true) {
+						Clock::duration begintime = timers[x] - t1;
+						Clock::duration finaltime = Clock::now() - timers[x];
+						bot << "BEGIN " << begintime.count() << " END " << finaltime.count() << " " << keycodes[x] << endl;
+						cout << "BEGIN " << begintime.count() << " END " << finaltime.count() << " " << keycodes[x] << endl;
+				}
+				isdown[x] = false;
 			}
 		}
+    }
+
+    return 0;
+	bot.close();
+}
+
+
+// /!\ 224 = getch additional key, H K P N = left/right/down/Up, 224 80 = DOWN
+
+// old code, just in case.
+/*
+		if( GetKeyState(VK_LCONTROL) & 0x8000)
+		{
+			if (isdown[0] == false) {
+				isdown[0] = true;
+				bot << "LCTRL" << endl;
+			}
+			auto t2 = Clock::now();
+			cout << "T " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() << " LCTRL" << endl;
+
+		}
 		else 
-			isdown = false;
+			isdown[0] = false;
+
+
+
 		if( GetAsyncKeyState(VK_LSHIFT) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "LSHIFT" << endl;
 				cout << "LSHIFT" << endl;
 			}
 		}
 		if( GetAsyncKeyState(VK_LMENU) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "LALT" << endl;
 				cout << "LALT" << endl;
 			}
 		}
 		if( GetAsyncKeyState(VK_RCONTROL) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "RCTRL" << endl;
 				cout << "RCTRL" << endl;
 			}
 		}
 		if( GetAsyncKeyState(VK_RSHIFT) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "RSHIFT" << endl;
 				cout << "RSHIFT" << endl;
 			}
 		}
 		if( GetAsyncKeyState(VK_RMENU) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "RALT" << endl;
 				cout << "RALT" << endl;
 			}
 		}
 		if( GetAsyncKeyState(VK_ESCAPE) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "ESC" << endl;
 				cout << "ESC" << endl;
 				quit = true;
@@ -99,24 +134,24 @@ int main()
 		}
 		if( GetAsyncKeyState(0x30) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "0" << endl;
 				cout << "0" << endl;
 			}
 		}
 		if( GetAsyncKeyState(VK_LEFT) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "LEFT" << endl;
 				cout << "LEFT" << endl;
 			}
 		}
 		if( GetAsyncKeyState(VK_RIGHT) != 0)
 		{
-			if (isdown == false) {
-				isdown = true;
+			if (isdown[0] == false) {
+				isdown[0] = true;
 				bot << "RIGHT" << endl;
 				cout << "RIGHT" << endl;
 			}
@@ -140,12 +175,4 @@ int main()
 			//}
 		}
 	//	else
-		//	isdown = false;
-    }
-
-    return 0;
-	bot.close();
-}
-
-
-// /!\ 224 = getch additional key, H K P N = left/right/down/Up, 224 80 = DOWN
+		//	isdown = false;*/

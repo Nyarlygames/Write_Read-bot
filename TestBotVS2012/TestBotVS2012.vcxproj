@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{24E90CD8-23E0-4B66-B3EF-38FF7E7AC444}</ProjectGuid>
     <RootNamespace>TestBotVS2012</RootNamespace>
+    <ProjectName>WriteBot</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -63,6 +64,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Write_Bot.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EnumKey.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
