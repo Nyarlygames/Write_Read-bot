@@ -1,7 +1,7 @@
 int keycodes [256] = 
 {
-	VK_LBUTTON,		// mouse left
-	VK_RBUTTON,		// mouse right
+//	VK_LBUTTON,		// mouse left
+//	VK_RBUTTON,		// mouse right
 	VK_CANCEL,		//control-break
 	VK_MBUTTON,		//middle mouse
 	VK_XBUTTON1,	// x1 mouse
@@ -67,5 +67,43 @@ int keycodes [256] =
 	0x57,			// W
 	0x58,			// X
 	0x59,			// Y
-	0x5A			// Z
+	0x5A,			// Z
+	VK_LWIN,		// Win key left
+	VK_RWIN,		// Win key right
+	VK_NUMPAD0,
+	VK_NUMPAD1,
+	VK_NUMPAD2,
+	VK_NUMPAD3,
+	VK_NUMPAD4,
+	VK_NUMPAD5,
+	VK_NUMPAD6,
+	VK_NUMPAD7,
+	VK_NUMPAD8,
+	VK_NUMPAD9,
+	VK_MULTIPLY,	// *
+	VK_ADD,			// +
+	VK_SEPARATOR,	// . ??
+	VK_SUBTRACT,	// -
+	VK_DECIMAL,		// . ??
+	VK_DIVIDE,		// /
+	VK_F1,
+	VK_F2,
+	VK_F3,
+	VK_F4,
+	VK_F5,
+	VK_F6,
+	VK_F7,
+	VK_F8,
+	VK_F9,
+	VK_F10,
+	VK_F11,
+	VK_F12,
+	VK_NUMLOCK,
+	VK_SCROLL,		// scroll lock
+	VK_LSHIFT,
+	VK_RSHIFT,
+	VK_LCONTROL,
+	VK_RCONTROL,
+	VK_LMENU,
+	VK_RMENU
 }; 

@@ -24,10 +24,16 @@ int main()
 	for (int i = 0; i < (sizeof(ispressed) /sizeof(ispressed[0])); i++) {
 		ispressed[i] = false;
 	}
-
+	// wait to start
+    while(!quit)
+    {
+		if (GetKeyState(VK_PRIOR) & 0x8000) {
+			quit = true;
+		}
+	}
+	quit = false;
 	// timer started
-	Clock::time_point t1 = Clock::now();
-
+	Clock::time_point timer_start = Clock::now();
 	// LOOP WHILE PAGE DOWN
     while(!quit)
     {
@@ -49,7 +55,7 @@ int main()
 			// KEY RELEASED OR NO KEYS
 			else {
 				if (isdown[x] == true) {
-						Clock::duration begintime = timers[x] - t1;
+						Clock::duration begintime = timers[x] - timer_start;
 						Clock::duration finaltime = Clock::now() - timers[x];
 						bot << "BEGIN " << begintime.count() << " END " << finaltime.count() << " " << keycodes[x] << endl;
 						cout << "BEGIN " << begintime.count() << " END " << finaltime.count() << " " << keycodes[x] << endl;
@@ -62,6 +68,111 @@ int main()
     return 0;
 	bot.close();
 }
+
+
+//------------------------------------------------- MOUSE -------------------------------------------------
+/*#define WIN32_LEAN_AND_MEAN
+#define _WIN32_WINNT 0x0500
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <conio.h>
+#include <string.h>
+#include <windows.h>
+
+
+#define X 123
+#define Y 123
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 800
+
+
+void MouseSetup(INPUT *buffer)
+{
+    buffer->type = INPUT_MOUSE;
+    buffer->mi.dx = (0 * (0xFFFF / SCREEN_WIDTH));
+    buffer->mi.dy = (0 * (0xFFFF / SCREEN_HEIGHT));
+    buffer->mi.mouseData = 0;
+    buffer->mi.dwFlags = MOUSEEVENTF_ABSOLUTE;
+    buffer->mi.time = 0;
+    buffer->mi.dwExtraInfo = 0;
+}
+
+
+void MouseMoveAbsolute(INPUT *buffer, int x, int y)
+{
+    buffer->mi.dx = (x * (0xFFFF / SCREEN_WIDTH));
+    buffer->mi.dy = (y * (0xFFFF / SCREEN_HEIGHT));
+    buffer->mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE);
+
+    SendInput(1, buffer, sizeof(INPUT));
+}
+
+
+void MouseClick(INPUT *buffer)
+{
+    buffer->mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTDOWN);
+    SendInput(1, buffer, sizeof(INPUT));
+
+    Sleep(10);
+
+    buffer->mi.dwFlags = (MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_LEFTUP);
+    SendInput(1, buffer, sizeof(INPUT));
+}
+
+
+int main(int argc, char *argv[])
+{
+    INPUT buffer[1];
+
+    MouseSetup(&buffer);
+
+    MouseMoveAbsolute(&buffer, X, Y);
+    MouseClick(&buffer);
+
+    return 0;
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // /!\ 224 = getch additional key, H K P N = left/right/down/Up, 224 80 = DOWN
