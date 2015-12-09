@@ -1,7 +1,7 @@
 int keycodes [256] = 
 {
-//	VK_LBUTTON,		// mouse left
-//	VK_RBUTTON,		// mouse right
+	VK_LBUTTON,		// mouse left
+	VK_RBUTTON,		// mouse right
 	VK_CANCEL,		//control-break
 	VK_MBUTTON,		//middle mouse
 	VK_XBUTTON1,	// x1 mouse
@@ -105,5 +105,18 @@ int keycodes [256] =
 	VK_LCONTROL,
 	VK_RCONTROL,
 	VK_LMENU,
-	VK_RMENU
+	VK_RMENU,
+	VK_OEM_1,
+	VK_OEM_PLUS,
+	VK_OEM_COMMA,
+	VK_OEM_MINUS,
+	VK_OEM_PERIOD,
+	VK_OEM_2,
+	VK_OEM_3,
+	VK_OEM_4,
+	VK_OEM_5,
+	VK_OEM_6,
+	VK_OEM_7,
+	VK_OEM_8,
+	VK_OEM_102
 }; 

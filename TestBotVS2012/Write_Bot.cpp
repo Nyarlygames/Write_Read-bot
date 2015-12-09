@@ -4,18 +4,19 @@
 #include <Windows.h>
 #include "EnumKey.h"
 #include <chrono>
-typedef std::chrono::high_resolution_clock Clock;
+typedef std::chrono::steady_clock Clock;
 using namespace std;
 
 int main()
 {
 	ofstream bot ("bot_track.txt",ofstream::binary);
-
     int c = 0;
 	bool quit = false;
 	bool *isdown = new bool[256];
 	bool *ispressed = new bool[256];
 	Clock::time_point *timers = new Clock::time_point[256];
+	POINT p;
+	POINT plast;
 
 	// init arrays of booleans
 	for (int i = 0; i < (sizeof(isdown) /sizeof(isdown[0])); i++) {
@@ -37,6 +38,15 @@ int main()
 	// LOOP WHILE PAGE DOWN
     while(!quit)
     {
+	// ----------------------------------------------------------------------------------------- Handle mouse click position !!!! ----------------------------------------------------------------------------------------- //
+		if (GetCursorPos(&p) && ((p.x != plast.x) && (p.y != plast.y)))
+		{
+			Clock::time_point mouse_moved = Clock::now();
+			Clock::duration mouse_time = mouse_moved - timer_start;
+			bot << "MOUSE " << "X " << p.x << " Y " << p.y << " TIME " << mouse_time.count() << endl;
+			//cout << "MOUSE " << "X " << p.x << " Y : " << p.y << endl;
+			plast = p;
+		}
 		// LOOP FOR EACH KEY
 		for (int x=0; x < (sizeof(keycodes) / sizeof(keycodes[0])); x++) {
 			// KEY IS BEING PRESSED
@@ -58,7 +68,9 @@ int main()
 						Clock::duration begintime = timers[x] - timer_start;
 						Clock::duration finaltime = Clock::now() - timers[x];
 						bot << "BEGIN " << begintime.count() << " END " << finaltime.count() << " " << keycodes[x] << endl;
-						cout << "BEGIN " << begintime.count() << " END " << finaltime.count() << " " << keycodes[x] << endl;
+						if ((keycodes[x] == VK_LBUTTON) || (keycodes[x] == VK_LBUTTON)){
+							cout << "BEGIN " << begintime.count() << " END " << finaltime.count() << " " << keycodes[x] << endl;
+						}
 				}
 				isdown[x] = false;
 			}
@@ -69,24 +81,7 @@ int main()
 	bot.close();
 }
 
-
-//------------------------------------------------- MOUSE -------------------------------------------------
-/*#define WIN32_LEAN_AND_MEAN
-#define _WIN32_WINNT 0x0500
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <conio.h>
-#include <string.h>
-#include <windows.h>
-
-
-#define X 123
-#define Y 123
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 800
-
+/*
 
 void MouseSetup(INPUT *buffer)
 {
