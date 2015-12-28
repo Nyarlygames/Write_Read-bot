@@ -128,12 +128,12 @@ int main()
 	// if loop mode
 	if (loop == true) {
 		while (!quit) {
+			if (GetKeyState(VK_NEXT) & 0x8000) {
+				quit = true;
+			}
 			if (curcmd < nbcmd) {
-				if (GetKeyState(VK_NEXT) & 0x8000) {
-					quit = true;
-				}
 				for (int i = curcmd; i < nbcmd; i++) {
-					Clock::duration new_time = Clock::now() - timer_start;
+					new_time = Clock::now() - timer_start;
 					// If key is being pressed at that time
 					if ((new_time.count() >= listcmd[i].start ) && (new_time.count() <= listcmd[i].end) && (listcmd[i].sent == false)) {
 					
@@ -161,7 +161,7 @@ int main()
 							SendInput(1, &mip_click, sizeof(mip_click));
 						}
 						else if (listcmd[i].keycode == VK_RBUTTON) {
-							mip_click.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+							mip_click.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
 							SendInput(1, &mip_click, sizeof(mip_click));
 						}
 						else {
@@ -175,7 +175,7 @@ int main()
 				}
 			}
 			
-			if (curmove < nbmove) {
+			/*if (curmove < nbmove) {
 				for (int j = curmove; j < nbmove; j++) {
 					Clock::duration move_time = Clock::now() - timer_start;
 					if ((move_time.count() >= listmove[j].time ) && (listmove[j].moved == false)) {
@@ -186,12 +186,12 @@ int main()
 						curmove++;
 					}
 				}
-			}
+			}*/
 			// Restart bot.
 			new_time = Clock::now() - timer_start;
-			if ((curcmd == nbcmd) && (curmove == nbmove) && (new_time.count() > listcmd[curcmd-1].end)) {
+			if ((curcmd == nbcmd)/* && (curmove == nbmove)*/ && (new_time.count() > listcmd[curcmd-1].end)) {
 				curcmd = 0;
-				curmove = 0;
+			//	curmove = 0;
 				timer_start = Clock::now();
 
 			}
@@ -201,7 +201,7 @@ int main()
 	else {
 		while (curcmd < nbcmd) {
 			for (int i = curcmd; i < nbcmd; i++) {
-				Clock::duration new_time = Clock::now() - timer_start;
+				 new_time = Clock::now() - timer_start;
 				// If key is being pressed at that time
 				if ((new_time.count() >= listcmd[i].start ) && (new_time.count() <= listcmd[i].end) && (listcmd[i].sent == false)) {
 					
@@ -229,7 +229,7 @@ int main()
 						SendInput(1, &mip_click, sizeof(mip_click));
 					}
 					else if (listcmd[i].keycode == VK_RBUTTON) {
-						mip_click.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+						mip_click.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
 						SendInput(1, &mip_click, sizeof(mip_click));
 					}
 					else {
